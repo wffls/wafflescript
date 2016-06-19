@@ -1,2 +1,4 @@
-**/bash
+bash
 bindata.go
+release
+build
