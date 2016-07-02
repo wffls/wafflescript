@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -9,10 +11,26 @@ import (
 
 func main() {
 	os.Setenv("WAFFLES_DIR", "bash")
+	os.Setenv("WAFFLES_NO_HELP", "true")
 	bash, _ := basher.NewContext("/bin/bash", false)
 	bash.CopyEnv()
-	bash.Source("bash/init.sh", Asset)
-	status, err := bash.Run("source \"${1:-/dev/stdin}\"", os.Args[1:])
+
+	for file, _ := range _bindata {
+		if file == "bash/init.sh" {
+			continue
+		}
+		bash.Source(file, Asset)
+	}
+
+	// Read in the first argument, which is the wafflescript.
+	// This will need modified in the future to support flags.
+	wscript, err := ioutil.ReadFile(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cmd := fmt.Sprintf("echo \"%s\" | source", wscript)
+	status, err := bash.Run(cmd, os.Args[1:])
 	if err != nil {
 		log.Fatal(err)
 	}
