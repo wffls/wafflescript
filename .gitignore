@@ -2,3 +2,4 @@ bash
 bindata.go
 release
 build
+**/*.swp

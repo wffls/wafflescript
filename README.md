@@ -82,5 +82,5 @@ $ make deps
 
 ```shell
 $ make build
-$ echo apt.pkg --help | ~/go/bin/wafflescript
+$ echo log.info foobar | ~/go/bin/wafflescript
 ```

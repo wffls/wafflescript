@@ -18,6 +18,11 @@ build:
 	go-bindata bash/...
 	go install
 
+build_dev:
+	rm bindata.go || true
+	go-bindata -ignore=\\.swp bash/...
+	go install
+
 release:
 	rm -rf release && mkdir release
 	mkdir -p build/Linux && GOOS=linux go build -o build/Linux/$(NAME)
